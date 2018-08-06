@@ -7,9 +7,11 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
 const models = require(path.join(__dirname, '../models'));
 const { validationResult } = require('express-validator/check');
+const imageUpload = require(path.join(__dirname, '../services/imageUpload.js'));
 
 class UserController {
 	static async register(req) {
@@ -54,8 +56,15 @@ class UserController {
 		};
 	}
 
-	static async update(body) {
-		await models.User.forge(body).save({ method: 'update', patch: true });
+	static async update(req) {
+		if ( req.file ){
+			req.body.avatar_url = req.file.filename;
+			console.log(req.file.path);
+			// await imageUpload.upload(req.file.path);
+			await fs.unlink(req.file.path);
+		}
+		delete req.body['password confirm'];
+		await models.User.forge(req.body).save({ method: 'update', patch: true });
 		return {
 			status: 201
 		};
