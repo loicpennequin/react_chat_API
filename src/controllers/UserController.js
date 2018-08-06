@@ -57,16 +57,24 @@ class UserController {
 	}
 
 	static async update(req) {
-		if ( req.file ){
-			req.body.avatar_url = req.file.filename;
-			console.log(req.file.path);
-			// await imageUpload.upload(req.file.path);
-			await fs.unlink(req.file.path);
+		const uploadAvatar = () =>
+			new Promise((res, rej) => {
+				imageUpload.upload(req.file.path, result => {
+					req.body.avatar_url = result;
+					fs.unlink(req.file.path);
+					res();
+				});
+			});
+		if (req.file) {
+			await uploadAvatar();
 		}
 		delete req.body['password confirm'];
-		await models.User.forge(req.body).save({ method: 'update', patch: true });
 		return {
-			status: 201
+			status: 201,
+			data: (await models.User.where('id', req.params.id).save(req.body, {
+				method: 'update',
+				patch: true
+			})).toJSON()
 		};
 	}
 }
