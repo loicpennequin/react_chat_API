@@ -24,6 +24,12 @@ router.get('/users/:id', (req, res, next) =>
 router.post('/requests', (req, res, next) =>
 	ctrl.ContactRequest('sendRequest', req => [req.body])(req, res, next)
 );
+router.get('/requests/:id/accept', (req, res, next) =>
+	ctrl.ContactRequest('acceptRequest', req => [req.params.id])(req, res, next)
+);
+router.get('/requests/:id/deny', (req, res, next) =>
+	ctrl.ContactRequest('denyRequest', req => [req.params.id])(req, res, next)
+);
 router.put('/users/:id', upload.single('avatar'), (req, res, next) =>
 	ctrl.User('update', (req, res, next) => [req])(req, res, next)
 );

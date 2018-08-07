@@ -33,15 +33,17 @@ class ContactRequestController {
             }).save()
         ];
         await Promise.all(contacts);
-        await request.destroy();
+        await models.ContactRequest
+            .forge("id", id)
+            .destroy();
         return {
             status: 200
         };
     }
 
     static async denyRequest(id) {
-        await models.ContactRequest.where("id", id)
-            .fetch()
+        await models.ContactRequest
+            .forge("id", id)
             .destroy();
         return {
             status: 200
