@@ -48,4 +48,7 @@ app.use((err, req, res) => {
     }
 });
 
+// Socket.io config
+require(path.join(__dirname, 'src/services/socketIo.js')).init(http);
+
 module.exports = http;

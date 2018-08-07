@@ -14,11 +14,11 @@ class Contact extends Bookshelf.Model {
     get tableName() { return 'contacts'; }
 
     contact(){
-        return this.belongsTo('User', 'contact_id');
+        return this.belongsTo('User', 'user_id');
     }
 
     user(){
-        return this.belongsTo('User', 'user_id');
+        return this.belongsTo('User', 'contact_id');
     }
 }
 
