@@ -33,4 +33,5 @@ router.get('/requests/:id/deny', (req, res, next) =>
 router.put('/users/:id', upload.single('avatar'), (req, res, next) =>
 	ctrl.User('update', (req, res, next) => [req])(req, res, next)
 );
+
 module.exports = router;
