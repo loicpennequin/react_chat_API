@@ -16,6 +16,7 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const compression = require('compression');
 
 //Express config
 const app = express();
@@ -27,6 +28,7 @@ require(path.join(__dirname, 'src/middlewares/passport.js'))();
 //App config
 app.disable('x-powered-by');
 app.use(require(path.join(__dirname, 'src/middlewares/allowCors.js')));
+app.use(compression());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
