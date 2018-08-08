@@ -69,11 +69,19 @@ class UserController {
 			await uploadAvatar();
 		}
 		delete req.body['password confirm'];
+		await models.User.where('id', req.params.id).save(req.body, {
+			method: 'update',
+			patch: true
+		});
+
 		return {
 			status: 201,
-			data: (await models.User.where('id', req.params.id).save(req.body, {
-				method: 'update',
-				patch: true
+			data: (await models.User.where('id', req.params.id).fetch({
+				withRelated: [
+					'contacts.user',
+					'sentRequests.sendee',
+					'recievedRequests.sender'
+				]
 			})).toJSON()
 		};
 	}
